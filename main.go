@@ -17,14 +17,21 @@ import (
 	"github.com/docker/engine-api/client"
 	"github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/container"
+	"github.com/joho/godotenv"
 )
 
 var cli *client.Client
 
 func main() {
 	fmt.Println("Helow")
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env File Founf ", err)
+	}
+
+	val, _ := os.LookupEnv("DOCKERIP")
+	log.Println("val -> ", val)
 	var cliErr error
-	cli, cliErr = client.NewClient("http://172.105.53.8:4243", "v1.30", nil, nil)
+	cli, cliErr = client.NewClient(val, "v1.30", nil, nil)
 	if cliErr != nil {
 		panic(cliErr)
 	}
